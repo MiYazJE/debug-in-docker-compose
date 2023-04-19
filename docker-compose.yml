@@ -1,0 +1,41 @@
+version: '2'
+
+services:
+
+  servicea:
+    image: servicea:local
+    build:
+      network: host
+      context: ./microservices/servicea
+      dockerfile: Dockerfile.dev
+    stdin_open: true
+    tty: true
+    volumes:
+      - "./microservices/servicea:/app"
+    networks:
+      - backend
+    ports:
+      - 3000:3000
+      - 9229:9229
+    restart: unless-stopped
+
+  serviceb:
+    image: serviceb:local
+    build:
+      network: host
+      context: ./microservices/serviceb
+      dockerfile: Dockerfile.dev
+    stdin_open: true
+    tty: true
+    volumes:
+      - "./microservices/serviceb:/app"
+    networks:
+      - backend
+    ports:
+      - 3000
+      - 9230:9229
+    restart: unless-stopped
+
+networks:
+  backend:
+    driver: bridge
